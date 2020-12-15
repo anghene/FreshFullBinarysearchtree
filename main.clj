@@ -1,10 +1,13 @@
- (def namen "A B C E")
+ 
+ 
 
 (defn pivot [[currname & othernames :as names]]
   (loop [pv currname
         on othernames
         cnt (count names)
-        acc (mapv #(str pv " " %) on)]
+        acc (conj 
+                  (mapv #(str pv " " %) on)
+            (str pv))]
         (if (zero? cnt)
           acc
           (let [remainingnames (rest on)
@@ -13,9 +16,12 @@
           (recur newpv
                 remainingnames
                 (count remainingnames) 
-                (into acc (mapv #(str newpv " " %) remainingnames)))
+                (into acc 
+                      (conj (mapv #(str newpv " " %) remainingnames)
+                      (str newpv))))
         ))))
 
+(defn runme [namen]
 (let [fullname (clojure.string/split namen #" ")
       [fname & othern :as names] fullname
       lname (last othern)
@@ -32,4 +38,6 @@
       (str firstandlast)
       (str fname " " (clojure.string/join " " othern))
              ))
-      
+)
+
+(runme "A B C D E F")
